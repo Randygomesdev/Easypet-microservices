@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: easypet-gateway
+  cloud:
+    gateway:
+      routes:
+        # Exemplo inicial de rota para o auth-service (porta 8081)
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/auth/**
+        # Rota para o business-service (porta 8082)
+        - id: business-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/businesses/**
+        # Rota para o catalog-service (porta 8083)
+        - id: catalog-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/products/**, /api/categories/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true

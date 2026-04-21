@@ -1,0 +1,45 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.tar.gz
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+
+# Docker
+.docker/
+init-db/data/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Frontend (Angular/Node)
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.local
+
+# Backup
+*.bak
+*.swp
+*.temp

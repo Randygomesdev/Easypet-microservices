@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  easypet-db:
+    image: postgres:15-alpine
+    container_name: easypet-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_password
+      # Scripts em /docker-entrypoint-initdb.d/ rodam na primeira inicialização
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: easypet-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@easypet.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - easypet-db
+
+volumes:
+  postgres_data:
