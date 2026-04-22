@@ -23,8 +23,17 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
-security:
-  jwt:
-    # Segredo provisório (mudar em produção)
-    secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
-    expiration: 86400000 # 24 horas
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+
+    jwt:
+      secret: ${JWT_SECRET}
+      expiration: 86400000 # 24 horas
