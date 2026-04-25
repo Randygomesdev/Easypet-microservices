@@ -1,11 +1,13 @@
 package br.com.easypet.auth.service;
 
+import br.com.easypet.auth.domain.entity.PasswordResetToken;
 import br.com.easypet.auth.domain.entity.User;
 import br.com.easypet.auth.domain.model.UserRole;
 import br.com.easypet.auth.dto.request.AuthenticationRequest;
 import br.com.easypet.auth.dto.request.RegisterRequest;
 import br.com.easypet.auth.dto.response.AuthenticationResponse;
 import br.com.easypet.auth.exception.AuthException;
+import br.com.easypet.auth.repository.PasswordResetTokenRepository;
 import br.com.easypet.auth.repository.UserRepository;
 import br.com.easypet.auth.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -24,6 +30,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordResetTokenRepository tokenRepository;
+    private final EmailService emailService;
+
 
     public AuthenticationResponse register(RegisterRequest request) {
         log.info("Iniciando registro de usuário: {}", request.email());
@@ -78,6 +87,54 @@ public class AuthService {
                 user.getRole().name(),
                 user.getPictureUrl()
                 );
+    }
+
+    @Transactional
+    public void forgotPassword(String email) {
+        log.info("Recebida solicitação de recuperação de senha para: {}", email);
+
+        userRepository.findByEmail(email).ifPresentOrElse(
+                user -> {
+                    log.info("Usuário localizado. Gerando token de recuperação para: {}", user.getId());
+
+                    tokenRepository.deleteByUser(user);
+
+                    String token = UUID.randomUUID().toString();
+                    PasswordResetToken resetToken = PasswordResetToken.builder()
+                            .token(token)
+                            .user(user)
+                            .expiryDate(LocalDateTime.now().plusHours(24))
+                            .build();
+                    tokenRepository.save(resetToken);
+                    log.debug("Token salvo no banco de dados para o usuário: {}", user.getId());
+
+                    emailService.sendPasswordResetEmail(user.getEmail(), user.getName(), token);
+                    log.info("E-mail de recuperação enviado com sucesso para: {}", email);
+                },
+                () -> {
+                    log.warn("Solicitação de reset ignorada: Email {} não cadastrado.", email);
+                }
+        );
+    }
+    @Transactional
+    public void resetPassword(String token, String newPassword) {
+        log.info("Tentativa de reset de senha com token recebido");
+
+        PasswordResetToken resetToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> {
+                    log.error("Token de recuperação inválido utilizado");
+                    return new AuthException("Token inválido");
+                });
+        if (resetToken.isExpired()) {
+            log.warn("Token de recuperação expirado para o usuário: {}", resetToken.getUser().getId());
+            throw new AuthException("Token expirado");
+        }
+        User user = resetToken.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        tokenRepository.delete(resetToken);
+        log.info("Senha alterada com sucesso para o usuário: {}", user.getId());
     }
 
 }

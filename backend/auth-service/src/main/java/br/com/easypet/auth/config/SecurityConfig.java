@@ -42,7 +42,7 @@ public class SecurityConfig {
 
     // 1. Lista de rotas públicas (incluindo Swagger)
     private static final String[] WHITE_LIST_URL = {
-            "/api/auth/**",
+            "/auth/**",
             "/v3/api-docs/**",
             "/v3/api-docs.yaml",
             "/swagger-ui/**",
