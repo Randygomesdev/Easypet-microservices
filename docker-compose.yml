@@ -1,19 +1,33 @@
 version: '3.8'
 
 services:
-  easypet-db:
+  # Banco de Dados do Auth-Service
+  auth-db:
     image: postgres:15-alpine
-    container_name: easypet-db
+    container_name: auth-db
     environment:
+      POSTGRES_DB: auth_db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin_password
-      # Scripts em /docker-entrypoint-initdb.d/ rodam na primeira inicialização
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
+      - auth_data:/var/lib/postgresql/data
 
+  # Banco de Dados do Business-Service
+  business-db:
+    image: postgres:15-alpine
+    container_name: business-db
+    environment:
+      POSTGRES_DB: business_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_password
+    ports:
+      - "5433:5432" # Porta externa 5433 para não conflitar com o Auth
+    volumes:
+      - business_data:/var/lib/postgresql/data
+
+  # Gerenciador Visual de Banco de Dados
   pgadmin:
     image: dpage/pgadmin4
     container_name: easypet-pgadmin
@@ -23,7 +37,9 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      - easypet-db
+      - auth-db
+      - business-db
 
 volumes:
-  postgres_data:
+  auth_data:
+  business_data:
