@@ -8,7 +8,7 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8081/api/auth';
+  private readonly API_URL = 'http://localhost:8081/api/v1/auth';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -24,11 +24,22 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string) {
+    return this.http.post(`${this.API_URL}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.API_URL}/reset-password`, { token, newPassword }, { responseType: 'text' });
+  }
+
+
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
+
+  
 
   private setSession(authResult: AuthenticationResponse) {
     localStorage.setItem('token', authResult.token);
