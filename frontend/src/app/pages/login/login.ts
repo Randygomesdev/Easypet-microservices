@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth';
 import { RouterLink } from "@angular/router";
 
 @Component({
@@ -43,7 +43,7 @@ export class Login implements OnInit {
   }
 
   loginWithGoogle() {
-    window.location.href = 'http://localhost:8081/oauth2/authorization/google';
+    window.location.href = 'http://localhost:8081/api/v1/oauth2/authorization/google';
   }
 
   ngOnInit() {
