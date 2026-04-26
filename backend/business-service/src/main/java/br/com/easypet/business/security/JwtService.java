@@ -39,7 +39,7 @@ public class JwtService {
                     .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
-            log.error("Token JWT inválido ou expirado");
+            log.error("Token JWT inválido: {}", e.getMessage());
             return false;
         }
     }
@@ -58,7 +58,7 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = secretKey.getBytes(java.nio.charset.StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
