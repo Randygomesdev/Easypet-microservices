@@ -3,10 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-success',
+  standalone: true,
   imports: [],
   template: '<p>Autenticando... aguarde.</p>'
 })
-export class LoginSuccess implements OnInit{
+export class LoginSuccessComponent implements OnInit{
 
   constructor(
     private route: ActivatedRoute,
