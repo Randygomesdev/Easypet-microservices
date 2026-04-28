@@ -4,6 +4,7 @@ import { LoginSuccessComponent } from './pages/login-success/login-success.compo
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
+import { PetListComponent } from './pages/pets/pet-list/pet-list.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -11,16 +12,17 @@ export const routes: Routes = [
     {path: 'forgot-password', component: ForgotPasswordComponent},
     {path: 'reset-password', component: ResetPasswordComponent},
     {path: 'login-success', component: LoginSuccessComponent},
+    { path: '', redirectTo: '/pets', pathMatch: 'full' },
+    
+    // Layout wrapper for all authenticated pages
     {
         path: '',
         component: DashboardLayoutComponent,
         canActivate: [authGuard],
         children: [
-            {path: 'pets', loadComponent: () => import('./pages/pets/pet-list/pet-list.component').then(m => m.PetListComponent)
-            },
-            { path: '', redirectTo: 'pets', pathMatch: 'full' }
+            { path: 'pets', component: PetListComponent }
         ]
     },
 
-    {path: '**', redirectTo: '/login'}
+    { path: '**', redirectTo: '/login' }
 ];

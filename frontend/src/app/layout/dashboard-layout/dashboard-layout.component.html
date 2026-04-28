@@ -25,7 +25,7 @@
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
             @if(userPicture()) {
               <div class="w-10 rounded-full shadow-sm border-2 border-transparent hover:border-primary transition-all">
-                <img [src]="userPicture()" alt="User Avatar" />
+                <img [src]="userPicture()" alt="User Avatar" referrerpolicy="no-referrer" (error)="userPicture.set(null)" />
               </div>
             } @else {
               <div class="bg-primary text-primary-content rounded-full w-10 shadow-sm border-2 border-transparent hover:border-primary-focus transition-all placeholder flex items-center justify-center">
