@@ -20,7 +20,7 @@ export class LoginSuccessComponent implements OnInit{
       if (token) {
         localStorage.setItem('token', token);
         console.log('Token do Google salvo com sucesso!' + token);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
       } else {
         this.router.navigate(['/login']);
         console.error('Token de autenticação não encontrado.');

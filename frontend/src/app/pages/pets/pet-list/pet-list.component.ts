@@ -42,4 +42,22 @@ export class PetListComponent implements OnInit{
   openAddPetModal(){
     this.petFormModal.openModal();
   }
+
+  openEditPetModal(pet: PetResponse){
+    this.petFormModal.openModal(pet);
+  }
+
+  deletePet(id: string) {
+    if (confirm('Tem certeza que deseja excluir este pet?')) {
+      this.petService.delete(id).subscribe({
+        next: () => {
+          this.loadPets();
+        },
+        error: (err) => {
+          console.error('Erro ao excluir pet:', err);
+          alert('Ocorreu um erro ao excluir o pet.');
+        }
+      });
+    }
+  }
 }

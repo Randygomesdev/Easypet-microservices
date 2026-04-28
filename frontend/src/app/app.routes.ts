@@ -4,6 +4,7 @@ import { LoginSuccessComponent } from './pages/login-success/login-success.compo
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -13,6 +14,7 @@ export const routes: Routes = [
     {
         path: '',
         component: DashboardLayoutComponent,
+        canActivate: [authGuard],
         children: [
             {path: 'pets', loadComponent: () => import('./pages/pets/pet-list/pet-list.component').then(m => m.PetListComponent)
             },

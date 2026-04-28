@@ -2,7 +2,7 @@ import { CommonModule, } from '@angular/common';
 import { Component, output, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { PetService } from '../../../services/pet.service';
-import { PetGender, PetRequest, PetSpecies } from '../../../models/pet.model';
+import { PetGender, PetRequest, PetSpecies, PetResponse } from '../../../models/pet.model';
 
 @Component({
   selector: 'app-pet-form',
@@ -14,6 +14,7 @@ export class PetFormComponent{
 
   petSaved = output<void>();
   loading = signal(false);
+  editingPetId = signal<string | null>(null);
 
   speciesOptions = Object.values(PetSpecies);
   genderOptions = Object.values(PetGender);
@@ -34,11 +35,26 @@ export class PetFormComponent{
   }
 
 
-  openModal() {
-    this.petForm.reset({
-      species: PetSpecies.DOG,
-      gender: PetGender.MALE
-    });
+  openModal(pet?: PetResponse) {
+    if (pet) {
+      this.editingPetId.set(pet.id);
+      this.petForm.patchValue({
+        name: pet.name,
+        species: pet.species,
+        breed: pet.breed,
+        gender: pet.gender,
+        weight: pet.weight,
+        birthDate: pet.birthDate,
+        microchipNumber: pet.microchipNumber,
+        pictureUrl: pet.pictureUrl
+      });
+    } else {
+      this.editingPetId.set(null);
+      this.petForm.reset({
+        species: PetSpecies.DOG,
+        gender: PetGender.MALE
+      });
+    }
 
     const modal = document.getElementById('pet_modal') as HTMLDialogElement;
     if (modal) {
@@ -57,12 +73,16 @@ export class PetFormComponent{
     if (this.petForm.valid) {
       this.loading.set(true);
       const request: PetRequest = this.petForm.value;
-      this.petService.create(request).subscribe({
+      const petId = this.editingPetId();
+      
+      const requestObs = petId ? this.petService.update(petId, request) : this.petService.create(request);
+
+      requestObs.subscribe({
         next: () => {
           this.loading.set(false);
           this.closeModal();
           this.petSaved.emit();
-          alert('Pet adicionado com sucesso! 🎉');
+          alert(petId ? 'Pet atualizado com sucesso! 🎉' : 'Pet adicionado com sucesso! 🎉');
         },
         error: (err) => {
           this.loading.set(false);
