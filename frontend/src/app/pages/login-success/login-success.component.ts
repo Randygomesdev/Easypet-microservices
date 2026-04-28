@@ -3,10 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-success',
+  standalone: true,
   imports: [],
   template: '<p>Autenticando... aguarde.</p>'
 })
-export class LoginSuccess implements OnInit{
+export class LoginSuccessComponent implements OnInit{
 
   constructor(
     private route: ActivatedRoute,
@@ -19,7 +20,7 @@ export class LoginSuccess implements OnInit{
       if (token) {
         localStorage.setItem('token', token);
         console.log('Token do Google salvo com sucesso!' + token);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
       } else {
         this.router.navigate(['/login']);
         console.error('Token de autenticação não encontrado.');
