@@ -7,6 +7,11 @@ target/
 *.tar.gz
 .mvn/wrapper/maven-wrapper.jar
 
+# Google Secrets
+docs/*.json
+.env
+
+
 # IDEs
 .idea/
 *.iml

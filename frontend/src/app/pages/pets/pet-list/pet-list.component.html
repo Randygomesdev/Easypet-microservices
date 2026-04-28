@@ -1,0 +1,64 @@
+<div class="flex flex-col gap-6">
+  
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-bold text-base-content">Meus Pets</h1>
+      <p class="text-base-content/70 mt-1">Gerencie seus companheiros e históricos.</p>
+    </div>
+    
+    <button class="btn btn-primary" (click)="openAddPetModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+      Adicionar Pet
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center items-center py-20">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else {
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      
+      @for (pet of pets(); track pet.id) {
+        <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all">
+          
+          <figure class="px-4 pt-4">
+            <div class="avatar">
+              <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <img [src]="pet.pictureUrl ? pet.pictureUrl : 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=' + pet.name" alt="Foto de {{ pet.name }}" />
+              </div>
+            </div>
+          </figure>
+
+          <div class="card-body items-center text-center">
+            <h2 class="card-title text-2xl">{{ pet.name }}</h2>
+            <div class="badge badge-secondary badge-outline">{{ pet.species }}</div>
+            
+            <p class="text-sm mt-2">Raça: <strong>{{ pet.breed }}</strong></p>
+            <p class="text-sm">Nascimento: <strong>{{ pet.birthDate | date:'dd/MM/yyyy' }}</strong></p> 
+            
+            <div class="card-actions mt-4 w-full flex gap-2">
+              <button class="btn btn-primary btn-sm flex-1">Ver Prontuário</button>
+              <button class="btn btn-warning btn-sm" (click)="openEditPetModal(pet)" title="Editar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+              </button>
+              <button class="btn btn-error btn-sm" (click)="deletePet(pet.id)" title="Excluir">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="col-span-full text-center py-20 bg-base-100 rounded-box shadow-sm border border-base-300">
+          <span class="text-6xl">🐶</span>
+          <h3 class="text-2xl font-bold mt-4">Nenhum pet encontrado</h3>
+          <p class="text-base-content/70 mt-2">Você ainda não cadastrou nenhum companheiro.</p>
+        </div>
+      }
+      
+    </div>
+  }
+
+</div>
+<app-pet-form (petSaved)="loadPets()"></app-pet-form>
