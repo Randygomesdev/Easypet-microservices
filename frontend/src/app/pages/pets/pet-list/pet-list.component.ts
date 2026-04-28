@@ -1,15 +1,18 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { PetResponse } from '../../../models/pet.model';
 import { PetService } from '../../../services/pet.service';
+import { PetFormComponent } from '../pet-form/pet-form.component';
 
 @Component({
   selector: 'app-pet-list',
-  imports: [DatePipe],
+  imports: [DatePipe, PetFormComponent],
   templateUrl: './pet-list.component.html',
   styleUrl: './pet-list.component.css',
 })
 export class PetListComponent implements OnInit{
+
+  @ViewChild(PetFormComponent) petFormModal!: PetFormComponent;
 
   pets = signal<PetResponse[]>([]);
   loading = signal<boolean>(true);
@@ -36,4 +39,7 @@ export class PetListComponent implements OnInit{
     });
   }
 
+  openAddPetModal(){
+    this.petFormModal.openModal();
+  }
 }

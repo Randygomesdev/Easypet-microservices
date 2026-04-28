@@ -1,0 +1,88 @@
+<dialog id="pet_modal" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box w-11/12 max-w-3xl">
+    <h3 class="font-bold text-2xl mb-6 text-primary flex items-center gap-2">
+      <span>🐾</span> Cadastrar Novo Pet
+    </h3>
+
+    
+    <form [formGroup]="petForm" (ngSubmit)="onSubmit()">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-semibold">Nome do Pet*</span></label>
+          <input type="text" formControlName="name" placeholder="Ex: Thor" class="input input-bordered w-full" 
+                 [class.input-error]="petForm.get('name')?.invalid && petForm.get('name')?.touched" />
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-semibold">Raça*</span></label>
+          <input type="text" formControlName="breed" placeholder="Ex: Golden Retriever" class="input input-bordered w-full" 
+                 [class.input-error]="petForm.get('breed')?.invalid && petForm.get('breed')?.touched" />
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-semibold">Espécie*</span></label>
+          <select formControlName="species" class="select select-bordered w-full">
+            @for (sp of speciesOptions; track sp) {
+              <option [value]="sp">{{ sp }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-semibold">Gênero*</span></label>
+          <select formControlName="gender" class="select select-bordered w-full">
+            @for (g of genderOptions; track g) {
+              <option [value]="g">{{ g }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-semibold">Data de Nascimento*</span></label>
+          <input type="date" formControlName="birthDate" class="input input-bordered w-full" 
+                 [class.input-error]="petForm.get('birthDate')?.invalid && petForm.get('birthDate')?.touched" />
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-semibold">Peso (kg)*</span></label>
+          <input type="number" step="0.1" formControlName="weight" placeholder="Ex: 30.5" class="input input-bordered w-full" 
+                 [class.input-error]="petForm.get('weight')?.invalid && petForm.get('weight')?.touched" />
+        </div>
+      </div>
+
+      <div class="form-control w-full mt-4">
+        <label class="label">
+          <span class="label-text font-semibold">Número do Microchip <span class="text-xs font-normal text-base-content/60">(Opcional)</span></span>
+        </label>
+        <input type="text" formControlName="microchipNumber" placeholder="Ex: EASY-123456" class="input input-bordered w-full" />
+      </div>
+
+      <div class="form-control w-full mt-4">
+        <label class="label">
+          <span class="label-text font-semibold">URL da Foto <span class="text-xs font-normal text-base-content/60">(Opcional)</span></span>
+        </label>
+        <input type="text" formControlName="pictureUrl" placeholder="https://..." class="input input-bordered w-full" />
+      </div>
+
+      <div class="modal-action mt-8">
+        <button type="button" class="btn" (click)="closeModal()">Cancelar</button>
+        
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          @if (loading()) {
+            <span class="loading loading-spinner"></span> Salvando...
+          } @else {
+            Salvar Pet
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+  
+  
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="closeModal()">close</button>
+  </form>
+</dialog>
