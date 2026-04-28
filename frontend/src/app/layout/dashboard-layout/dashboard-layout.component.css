@@ -1,0 +1,5 @@
+.active {
+    background-color: oklch(var(--p)); /* Cor primária do DaisyUI */
+    color: oklch(var(--pc)); /* Cor de texto sobre a primária */
+    font-weight: bold;
+}

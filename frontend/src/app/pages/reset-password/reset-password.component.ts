@@ -1,18 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../services/auth';
-import { OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './reset-password.html',
+  templateUrl: './reset-password.component.html',
 })
-export class ResetPassword implements OnInit {
+export class ResetPasswordComponent implements OnInit {
   resetForm: FormGroup;
   token: string = '';
   loading = false;
@@ -54,7 +52,6 @@ export class ResetPassword implements OnInit {
         next: () => {
           this.success = true;
           this.loading = false;
-
           this.cdr.detectChanges();
         },
         error: (err) => {                
