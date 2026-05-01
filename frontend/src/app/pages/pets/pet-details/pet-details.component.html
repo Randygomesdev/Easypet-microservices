@@ -1,0 +1,124 @@
+<div class="container mx-auto p-4 lg:p-8 animate-fade-in">
+  
+  <!-- BOTÃO VOLTAR -->
+  <button routerLink="/pets" class="btn btn-ghost gap-2 mb-6 hover:bg-base-300">
+    <span>⬅️</span> Voltar para meus Pets
+  </button>
+
+  @if (isLoading()) {
+    <div class="flex flex-col items-center justify-center min-h-[50vh] gap-4">
+      <span class="loading loading-dots loading-lg text-primary"></span>
+      <p class="text-base-content/60 font-medium">Carregando histórico de saúde...</p>
+    </div>
+  } @else if (pet()) {
+    
+    <!-- HEADER: PERFIL DO PET -->
+    <div class="card lg:card-side bg-base-100 shadow-xl border border-base-300 overflow-hidden mb-8">
+      <figure class="lg:w-1/3 bg-base-200">
+        <img [src]="pet()?.pictureUrl || 'assets/placeholder-pet.png'" [alt]="pet()?.name" class="object-cover w-full h-64 lg:h-full" />
+      </figure>
+      <div class="card-body lg:w-2/3">
+        <div class="flex justify-between items-start">
+          <div>
+            <h2 class="card-title text-4xl font-black text-primary mb-1">{{ pet()?.name }}</h2>
+            <p class="text-base-content/70 text-lg">{{ pet()?.breed }} • {{ pet()?.species }}</p>
+          </div>
+          <div class="badge badge-success badge-lg gap-2 py-4">
+            <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+            Saúde em Dia
+          </div>
+        </div>
+        
+        <div class="divider my-2"></div>
+        
+        <!-- INFO RÁPIDA -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+          <div class="flex flex-col">
+            <span class="text-xs uppercase font-bold text-base-content/40">Gênero</span>
+            <span class="font-semibold">{{ pet()?.gender === 'MALE' ? 'Macho ♂️' : 'Fêmea ♀️' }}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs uppercase font-bold text-base-content/40">Peso Atual</span>
+            <span class="font-semibold text-primary text-xl">{{ lastWeight()?.weight || pet()?.weight }} kg</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs uppercase font-bold text-base-content/40">Nascimento</span>
+            <span class="font-semibold">{{ pet()?.birthDate | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs uppercase font-bold text-base-content/40">Microchip</span>
+            <span class="font-semibold text-base-content/60">{{ pet()?.microchipNumber || 'Não registrado' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRID DE SAÚDE -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- CARD: ÚLTIMA CONSULTA -->
+      <div class="card bg-base-100 shadow-md border-t-4 border-blue-400 hover:shadow-lg transition-all">
+        <div class="card-body">
+          <h3 class="card-title text-blue-600">🩺 Última Consulta</h3>
+          @if (lastAppointment()) {
+            <p class="text-xl font-bold mt-2">{{ lastAppointment()?.date | date:'dd/MM/yyyy' }}</p>
+            <p class="text-sm text-base-content/70 italic">"{{ lastAppointment()?.reason }}"</p>
+          } @else {
+            <p class="text-base-content/40 italic">Nenhuma consulta registrada</p>
+          }
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline btn-info">Ver Histórico</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD: VACINAS -->
+      <div class="card bg-base-100 shadow-md border-t-4 border-emerald-400 hover:shadow-lg transition-all">
+        <div class="card-body">
+          <h3 class="card-title text-emerald-600">💉 Próximas Vacinas</h3>
+          <div class="space-y-2 mt-2">
+            @for (vaccine of nextVaccines(); track vaccine.id) {
+              <div class="flex justify-between items-center text-sm p-2 bg-base-200 rounded-lg">
+                <span class="font-medium">{{ vaccine.name }}</span>
+                <span class="badge badge-sm">{{ vaccine.nextDoseDate | date:'dd/MM/yyyy' }}</span>
+              </div>
+            } @empty {
+              <p class="text-base-content/40 italic text-sm">Tudo atualizado!</p>
+            }
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline btn-success">Ver Cartão</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD: MEDICAMENTOS -->
+      <div class="card bg-base-100 shadow-md border-t-4 border-orange-400 hover:shadow-lg transition-all">
+        <div class="card-body">
+          <h3 class="card-title text-orange-600">💊 Medicamentos Ativos</h3>
+          <div class="space-y-2 mt-2">
+            @for (med of activeMedications(); track med.id) {
+              <div class="flex flex-col p-2 bg-orange-50 rounded-lg border border-orange-100">
+                <span class="font-bold text-orange-800">{{ med.name }}</span>
+                <span class="text-xs text-orange-600">{{ med.dosage }} • {{ med.frequency }}</span>
+              </div>
+            } @empty {
+              <p class="text-base-content/40 italic text-sm">Sem medicamentos no momento</p>
+            }
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline btn-warning">Gerenciar</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  } @else {
+    <div class="alert alert-error shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span>Ops! Pet não encontrado ou você não tem permissão para vê-lo.</span>
+    </div>
+  }
+
+</div>

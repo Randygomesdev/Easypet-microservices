@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { VaccineRequest, VaccineResponse } from '../models/vaccination.model';
+import { VaccineRequest, VaccineResponse } from '../models/vaccine.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
