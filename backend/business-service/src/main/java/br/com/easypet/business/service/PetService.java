@@ -41,6 +41,12 @@ public class PetService {
                 .map(petMapper::toResponse);
     }
 
+    @Transactional(readOnly = true)
+    public PetResponse findById(UUID ownerId, UUID id) {
+        log.info("Buscando detalhes do pet: {} para o dono: {}", id, ownerId);
+        return petMapper.toResponse(findPetByIdAndOwner(ownerId, id));
+    }
+
     @CacheEvict(value = "user_pets", key = "#ownerId")
     public PetResponse update(UUID ownerId, UUID id, PetRequest request){
         Pet pet = findPetByIdAndOwner(ownerId, id);
