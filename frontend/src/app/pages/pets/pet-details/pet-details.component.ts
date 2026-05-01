@@ -11,8 +11,6 @@ import { MedicationResponse } from '../../../models/medication.model';
 import { VaccineResponse } from '../../../models/vaccine.model';
 import { AppointmentResponse } from '../../../models/appointment.model';
 import { CommonModule, DatePipe } from '@angular/common';
-import { Route } from 'lucide-angular';
-
 @Component({
   selector: 'app-pet-details',
   imports: [CommonModule, RouterModule, DatePipe],
@@ -45,10 +43,13 @@ export class PetDetailsComponent implements OnInit {
   private LoadPetData(petId: string): void {
     this.isLoading.set(true);
 
-     this.petService.findAll().subscribe({
-      next: (page) => {
-        const foundPet = page.content.find(p => p.id === petId);
-        if (foundPet) this.pet.set(foundPet);
+    this.petService.getById(petId).subscribe({
+      next: (foundPet) => {
+        this.pet.set(foundPet);
+      },
+      error: (err) => {
+        console.error('Erro ao buscar pet:', err);
+        this.isLoading.set(false);
       }
     });
 
@@ -61,14 +62,17 @@ export class PetDetailsComponent implements OnInit {
     });
     
     this.vaccineService.findAll(petId).subscribe({
-      next: (list) => {
+      next: (page: any) => {
+        // Se o retorno for um Page, usamos .content, senão usamos a lista direta
+        const list = page.content || page;
         this.nextVaccines.set(list.slice(0, 3));
       }
     });
 
     this.appointmentService.findAll(petId, 0, 1).subscribe({
-      next: (page) => {
-        if (page.content.length > 0) this.lastAppointment.set(page.content[0]);
+      next: (page: any) => {
+        const list = page.content || page;
+        if (list.length > 0) this.lastAppointment.set(list[0]);
       }
     });
 

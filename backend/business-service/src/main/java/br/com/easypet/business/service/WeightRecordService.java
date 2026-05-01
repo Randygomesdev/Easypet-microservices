@@ -43,7 +43,6 @@ public class WeightRecordService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "weights", key = "#petId")
     public Page<WeightRecordResponse> findAllByPet(UUID petId, Pageable pageable) {
         findPetIfOwner(petId);
         return weightRecordRepository.findAllByPetIdOrderByDateDesc(petId, pageable)

@@ -29,8 +29,8 @@ export interface PetResponse {
   gender: PetGender;
   weight: number;
   birthDate: string;
-  microchipNumber: string;
-  pictureUrl: string;
+  microchipNumber?: string;
+  pictureUrl?: string;
   active: boolean;
   ownerId: string;
 }

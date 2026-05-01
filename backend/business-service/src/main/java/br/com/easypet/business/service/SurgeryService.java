@@ -39,7 +39,6 @@ public class SurgeryService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "surgeries", key = "#petId")
     public Page<SurgeryResponse> findAllByPet(UUID petId, Pageable pageable) {
         findPetIfOwner(petId);
         return surgeryRepository.findAllByPetIdOrderByDateDesc(petId, pageable)

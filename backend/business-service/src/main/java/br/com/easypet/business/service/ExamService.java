@@ -39,7 +39,6 @@ public class ExamService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "exams", key = "#petId")
     public Page<ExamResponse> findAllByPet(UUID petId, Pageable pageable) {
         findPetIfOwner(petId);
         return examRepository.findAllByPetIdOrderByDateDesc(petId, pageable)

@@ -42,7 +42,6 @@ public class VaccineService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "vaccines", key = "#petId")
     public Page<VaccineResponse> findAllByPet(UUID petId, Pageable pageable) {
         log.info("Buscando histórico de vacinas para o pet ID: {}", petId);
 

@@ -39,7 +39,7 @@ public class JwtService {
                     .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
-            log.error("Token JWT inválido: {}", e.getMessage());
+            log.warn("Token JWT inválido ou expirado: {}", e.getMessage());
             return false;
         }
     }

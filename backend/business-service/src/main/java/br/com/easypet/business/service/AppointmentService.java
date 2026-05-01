@@ -48,7 +48,6 @@ public class AppointmentService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "appointments", key = "#petId")
     public Page<AppointmentResponse> findAllByPet(UUID petId, Pageable pageable) {
         log.info("Buscando consultas no BANCO para o pet: {} (e salvando no Redis)", petId);
         findPetIfOwner(petId);

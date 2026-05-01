@@ -34,7 +34,6 @@ public class PetService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "user_pets", key = "#ownerId")
     public Page<PetResponse> findAllByOwner(UUID ownerId, Pageable pageable){
         log.info("Buscando pets no BANCO para o dono: {}", ownerId);
         return petRepository.findByOwnerIdAndActiveTrue(ownerId, pageable)

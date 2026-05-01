@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class VaccineService {
   private apiUrl(petId: string) {
-    return `${environment.businessApiUrl}/pets/${petId}/vaccinations`;
+    return `${environment.businessApiUrl}/pets/${petId}/vaccines`;
   }
   constructor(private http: HttpClient) {}
   create(petId: string, request: VaccineRequest): Observable<VaccineResponse> {
