@@ -16,7 +16,7 @@ import java.util.UUID;
 public class PasswordResetToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false, unique = true)
