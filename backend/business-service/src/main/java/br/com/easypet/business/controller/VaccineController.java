@@ -18,7 +18,7 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/pets/{petId}/vaccinations")
+@RequestMapping("/pets/{petId}/vaccines")
 @RequiredArgsConstructor
 @Tag(name = "Vacinas", description = "Histórico de vacinação dos pets")
 public class VaccineController {

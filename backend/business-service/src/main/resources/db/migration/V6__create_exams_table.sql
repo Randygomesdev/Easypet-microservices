@@ -8,5 +8,7 @@ CREATE TABLE exams (
     results_summary TEXT,
     file_url TEXT,
     certified BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_exams_pet FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE
 );
