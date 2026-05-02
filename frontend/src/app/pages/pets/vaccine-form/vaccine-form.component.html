@@ -1,0 +1,95 @@
+<dialog id="vaccine_modal" class="modal">
+  <div class="modal-box max-w-2xl">
+    <h3 class="font-black text-2xl text-emerald-600 mb-6 flex items-center gap-2">
+      💉 {{ isEditMode() ? 'Editar Vacina' : 'Registrar Nova Vacina' }}
+    </h3>
+
+    <form [formGroup]="vaccineForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      
+      <!-- NOME DA VACINA -->
+      <div class="form-control w-full">
+        <label class="label">
+          <span class="label-text font-bold">Nome da Vacina</span>
+        </label>
+        <input 
+          type="text" 
+          formControlName="name" 
+          placeholder="Ex: V10, Raiva, Giárdia" 
+          class="input input-bordered w-full" 
+          [class.input-error]="vaccineForm.get('name')?.invalid && vaccineForm.get('name')?.touched"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- DATA APLICAÇÃO -->
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-bold">Data da Aplicação</span>
+          </label>
+          <input 
+            type="date" 
+            formControlName="applicationDate" 
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <!-- PRÓXIMA DOSE -->
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-bold text-primary">Próxima Dose (Reforço)</span>
+          </label>
+          <input 
+            type="date" 
+            formControlName="nextDoseDate" 
+            class="input input-bordered w-full border-primary/30"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- VETERINÁRIO -->
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-bold">Veterinário</span>
+          </label>
+          <input 
+            type="text" 
+            formControlName="vetName" 
+            placeholder="Nome do Dr(a)." 
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <!-- LOTE -->
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text font-bold">Lote / Selo</span>
+          </label>
+          <input 
+            type="text" 
+            formControlName="lot" 
+            placeholder="Ex: ABC123456" 
+            class="input input-bordered w-full"
+          />
+        </div>
+      </div>
+
+      <div class="modal-action flex justify-between items-center mt-8">
+        <button type="button" class="btn btn-ghost" (click)="closeModal()">Cancelar</button>
+        <button 
+          type="submit" 
+          class="btn btn-success px-8 text-white" 
+          [disabled]="vaccineForm.invalid || loading()"
+        >
+          @if (loading()) {
+            <span class="loading loading-spinner"></span>
+          }
+          Salvar Vacina
+        </button>
+      </div>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="closeModal()">close</button>
+  </form>
+</dialog>

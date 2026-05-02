@@ -1,0 +1,72 @@
+<dialog id="appointment_modal" class="modal">
+  <div class="modal-box max-w-2xl border-t-8 border-blue-500">
+    <h3 class="font-black text-2xl text-blue-700 mb-6 flex items-center gap-2">
+      🩺 {{ isEditMode() ? 'Editar Consulta' : 'Agendar Nova Consulta' }}
+    </h3>
+
+    <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      
+      <!-- MOTIVO -->
+      <div class="form-control w-full">
+        <label class="label"><span class="label-text font-bold">Motivo da Consulta</span></label>
+        <input 
+          type="text" 
+          formControlName="reason" 
+          placeholder="Ex: Check-up anual, Vacinação, Coceira na orelha" 
+          class="input input-bordered w-full" 
+          [class.input-error]="appointmentForm.get('reason')?.invalid && appointmentForm.get('reason')?.touched"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- DATA E HORA -->
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-bold">Data e Hora</span></label>
+          <input 
+            type="datetime-local" 
+            formControlName="date" 
+            class="input input-bordered w-full" 
+          />
+        </div>
+
+        <!-- VETERINÁRIO -->
+        <div class="form-control w-full">
+          <label class="label"><span class="label-text font-bold text-base-content/60">Veterinário (Opcional)</span></label>
+          <input 
+            type="text" 
+            formControlName="vetName" 
+            placeholder="Nome do Dr(a)." 
+            class="input input-bordered w-full" 
+          />
+        </div>
+      </div>
+
+      <!-- NOTAS CLÍNICAS -->
+      <div class="form-control w-full">
+        <label class="label"><span class="label-text font-bold">Notas / Sintomas</span></label>
+        <textarea 
+          formControlName="clinicalNotes" 
+          class="textarea textarea-bordered h-24" 
+          placeholder="Descreva brevemente o que o pet está sentindo ou o objetivo da consulta..."
+        ></textarea>
+      </div>
+
+      <div class="modal-action flex justify-between items-center mt-8">
+        <button type="button" class="btn btn-ghost" (click)="closeModal()">Cancelar</button>
+        <button 
+          type="submit" 
+          class="btn btn-info px-8 text-white shadow-md font-bold" 
+          [disabled]="appointmentForm.invalid || loading()"
+        >
+          @if (loading()) {
+            <span class="loading loading-spinner"></span>
+          }
+          Agendar Consulta
+        </button>
+      </div>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="closeModal()">close</button>
+  </form>
+</dialog>

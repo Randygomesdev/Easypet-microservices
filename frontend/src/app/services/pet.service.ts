@@ -32,6 +32,7 @@ export class PetService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-
-    
+  getById(id: string): Observable<PetResponse> {
+    return this.http.get<PetResponse>(`${this.apiUrl}/${id}`);
+  }
 }

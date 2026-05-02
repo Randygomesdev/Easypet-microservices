@@ -40,6 +40,12 @@ services:
       - auth-db
       - business-db
 
+  redis:
+    image: redis:7.2-alpine
+    container_name: easypet-redis
+    ports:
+      - "6379:6379"
+
 volumes:
   auth_data:
   business_data:

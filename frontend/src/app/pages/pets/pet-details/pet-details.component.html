@@ -1,0 +1,170 @@
+<div class="container mx-auto p-4 lg:p-8 animate-fade-in">
+  
+  <!-- BOTÃO VOLTAR -->
+  <button routerLink="/pets" class="btn btn-ghost gap-2 mb-6 hover:bg-base-300">
+    <span>⬅️</span> Voltar para meus Pets
+  </button>
+
+  @if (isLoading()) {
+    <div class="flex flex-col items-center justify-center min-h-[50vh] gap-4">
+      <span class="loading loading-dots loading-lg text-primary"></span>
+      <p class="text-base-content/60 font-medium">Carregando histórico de saúde...</p>
+    </div>
+  } @else if (pet()) {
+    
+    <!-- HEADER: PERFIL DO PET -->
+    <div class="card lg:card-side bg-base-100 shadow-xl border border-base-300 overflow-hidden mb-8">
+      <figure class="lg:w-1/4 bg-base-200">
+        <img [src]="pet()?.pictureUrl || 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=' + pet()?.name" [alt]="pet()?.name" class="object-cover w-full h-48 lg:h-full" />
+      </figure>
+      <div class="card-body p-4 lg:p-6 lg:w-3/4 flex flex-col justify-between">
+        <div>
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="card-title text-4xl font-black text-primary mb-0 leading-tight">{{ pet()?.name }}</h2>
+              <p class="text-base-content/60 text-lg font-medium">{{ pet()?.breed }} • {{ pet()?.species }}</p>
+            </div>
+            <div class="badge badge-success gap-2 py-4 px-4 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+              Saúde em Dia
+            </div>
+          </div>
+          
+          <div class="divider my-4"></div>
+          
+          <!-- INFO RÁPIDA -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 py-2">
+            <div class="flex flex-col">
+              <span class="text-xs uppercase font-bold text-base-content/40 tracking-widest mb-1">Gênero</span>
+              <span class="font-bold text-lg">{{ pet()?.gender === 'MALE' ? 'Macho ♂️' : 'Fêmea ♀️' }}</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-xs uppercase font-bold text-base-content/40 tracking-widest mb-1">Peso Atual</span>
+              <div class="flex items-center gap-2">
+                <span class="font-black text-primary text-2xl">{{ (lastWeight()?.weight || pet()?.weight) | number:'1.1-2' }} kg</span>
+                <button (click)="openWeightModal()" class="btn btn-circle btn-ghost btn-xs text-primary border border-primary/20 hover:bg-primary/10" title="Registrar novo peso">+</button>
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-xs uppercase font-bold text-base-content/40 tracking-widest mb-1">Nascimento</span>
+              <span class="font-bold text-lg">{{ pet()?.birthDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-xs uppercase font-bold text-base-content/40 tracking-widest mb-1">Microchip</span>
+              <span class="font-bold text-base-content/60">{{ pet()?.microchipNumber || 'Não registrado' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTÕES DE AÇÃO NA BASE -->
+        <div class="card-actions justify-end gap-2 mt-6 flex-nowrap overflow-x-auto">
+          <button class="btn btn-warning btn-square btn-sm md:btn-md font-bold text-white shadow-sm shrink-0" title="Exportar Ficha em PDF">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+          </button>
+          <button (click)="openEditPetModal()" class="btn btn-sm md:btn-md btn-primary px-3 md:px-8 font-bold uppercase tracking-widest flex-1 md:flex-none">
+            Editar
+          </button>
+          <button (click)="deletePet()" class="btn btn-sm md:btn-md btn-ghost hover:bg-error/10 text-error font-bold uppercase tracking-widest border border-error/20 px-3 md:px-8 flex-1 md:flex-none">
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRÁFICO DE PESO -->
+    @if (allWeights().length > 0) {
+      <div class="mb-8 flex flex-col gap-2">
+        <app-weight-chart [weights]="allWeights()"></app-weight-chart>
+        <div class="flex justify-end">
+          <button (click)="openWeightHistoryModal()" class="btn btn-ghost btn-sm text-primary gap-2">
+            <span>📋</span> Ver Histórico Completo
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- GRID DE SAÚDE -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- CARD: ÚLTIMA CONSULTA -->
+      <div class="card bg-base-100 shadow-md border-t-4 border-blue-400 hover:shadow-lg transition-all">
+        <div class="card-body">
+          <h3 class="card-title text-blue-600">🩺 Última Consulta</h3>
+          @if (lastAppointment()) {
+            <p class="text-xl font-bold mt-2">{{ lastAppointment()?.date | date:'dd/MM/yyyy' }}</p>
+            <p class="text-sm text-base-content/70 italic">"{{ lastAppointment()?.reason }}"</p>
+          } @else {
+            <p class="text-base-content/40 italic">Nenhuma consulta registrada</p>
+          }
+          <div class="card-actions justify-end mt-4 gap-2">
+            <button (click)="openAppointmentHistoryModal()" class="btn btn-sm btn-link text-blue-600 no-underline">Ver Histórico</button>
+            <button (click)="openAppointmentModal()" class="btn btn-sm btn-outline btn-info">Agendar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD: VACINAS -->
+      <div class="card bg-base-100 shadow-md border-t-4 border-emerald-400 hover:shadow-lg transition-all">
+        <div class="card-body">
+          <h3 class="card-title text-emerald-600">💉 Próximas Vacinas</h3>
+          <div class="space-y-2 mt-2">
+            @for (vaccine of nextVaccines(); track vaccine.id) {
+              <div class="flex justify-between items-center text-sm p-2 bg-base-200 rounded-lg">
+                <span class="font-medium">{{ vaccine.name }}</span>
+                <span class="badge badge-sm">{{ vaccine.nextDoseDate | date:'dd/MM/yyyy' }}</span>
+              </div>
+            } @empty {
+              <p class="text-base-content/40 italic text-sm">Tudo atualizado!</p>
+            }
+          </div>
+          <div class="card-actions justify-end mt-4 gap-2">
+            <button (click)="openVaccineHistoryModal()" class="btn btn-sm btn-link text-emerald-600 no-underline">Ver Histórico</button>
+            <button (click)="openVaccineModal()" class="btn btn-sm btn-outline btn-success">Registrar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD: MEDICAMENTOS -->
+      <div class="card bg-base-100 shadow-md border-t-4 border-orange-400 hover:shadow-lg transition-all">
+        <div class="card-body">
+          <h3 class="card-title text-orange-600">💊 Medicamentos Ativos</h3>
+          <div class="space-y-2 mt-2">
+            @for (med of activeMedications(); track med.id) {
+              <div class="flex flex-col p-2 bg-orange-50 rounded-lg border border-orange-100">
+                <span class="font-bold text-orange-800">{{ med.name }}</span>
+                <span class="text-xs text-orange-600">{{ med.dosage }} • {{ med.frequency }}</span>
+              </div>
+            } @empty {
+              <p class="text-base-content/40 italic text-sm">Sem medicamentos no momento</p>
+            }
+          </div>
+          <div class="card-actions justify-end mt-4 gap-2">
+            <button (click)="openMedicationHistoryModal()" class="btn btn-sm btn-link text-orange-600 no-underline">Ver Histórico</button>
+            <button (click)="openMedicationModal()" class="btn btn-sm btn-outline btn-warning">Novo</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  } @else {
+    <div class="alert alert-error shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span>Ops! Pet não encontrado ou você não tem permissão para vê-lo.</span>
+    </div>
+  }
+
+</div>
+
+@if (pet()) {
+  <app-weight-form [petId]="pet()!.id" (weightSaved)="loadPetData()"></app-weight-form>
+  <app-vaccine-form [petId]="pet()!.id" (vaccineSaved)="loadPetData()"></app-vaccine-form>
+  <app-medication-form [petId]="pet()!.id" (medicationSaved)="loadPetData()"></app-medication-form>
+  <app-appointment-form [petId]="pet()!.id" (appointmentSaved)="loadPetData()"></app-appointment-form>
+  <app-weight-history [petId]="pet()!.id" [weights]="allWeights()" (historyChanged)="loadPetData()"></app-weight-history>
+  <app-vaccine-history [petId]="pet()!.id" [vaccines]="allVaccines()" (editRequested)="openVaccineModal($event)" (historyChanged)="loadPetData()"></app-vaccine-history>
+  <app-medication-history [petId]="pet()!.id" [medications]="allMedications()" (editRequested)="openMedicationModal($event)" (historyChanged)="loadPetData()"></app-medication-history>
+  <app-appointment-history [petId]="pet()!.id" [appointments]="allAppointments()" (editRequested)="openAppointmentModal($event)" (historyChanged)="loadPetData()"></app-appointment-history>
+}
+<!-- Modals -->
+<app-pet-form (petSaved)="loadPetData()"></app-pet-form>

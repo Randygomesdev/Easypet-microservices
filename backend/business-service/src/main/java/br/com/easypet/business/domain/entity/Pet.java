@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -54,6 +55,12 @@ public class Pet {
 
     @Column(nullable = false)
     private UUID ownerId;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
+    private List<Vaccine> vaccinations;
+    
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
+    private List<WeightRecord> weightRecords;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
