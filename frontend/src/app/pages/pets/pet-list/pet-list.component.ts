@@ -1,13 +1,13 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { PetResponse } from '../../../models/pet.model';
 import { PetService } from '../../../services/pet.service';
 import { PetFormComponent } from '../pet-form/pet-form.component';
 
 @Component({
   selector: 'app-pet-list',
-  imports: [DatePipe, PetFormComponent, RouterLink],
+  imports: [PetFormComponent, RouterModule],
   templateUrl: './pet-list.component.html',
   styleUrl: './pet-list.component.css',
 })
