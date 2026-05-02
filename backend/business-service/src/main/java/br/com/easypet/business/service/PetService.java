@@ -34,11 +34,16 @@ public class PetService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "user_pets", key = "#ownerId")
     public Page<PetResponse> findAllByOwner(UUID ownerId, Pageable pageable){
         log.info("Buscando pets no BANCO para o dono: {}", ownerId);
         return petRepository.findByOwnerIdAndActiveTrue(ownerId, pageable)
                 .map(petMapper::toResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public PetResponse findById(UUID ownerId, UUID id) {
+        log.info("Buscando detalhes do pet: {} para o dono: {}", id, ownerId);
+        return petMapper.toResponse(findPetByIdAndOwner(ownerId, id));
     }
 
     @CacheEvict(value = "user_pets", key = "#ownerId")

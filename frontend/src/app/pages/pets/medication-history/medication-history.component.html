@@ -1,0 +1,58 @@
+<dialog id="medication_history_modal" class="modal">
+  <div class="modal-box max-w-3xl">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="font-black text-2xl text-orange-600">💊 Histórico de Medicamentos</h3>
+      <button class="btn btn-sm btn-circle btn-ghost" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="overflow-x-auto max-h-[60vh]">
+      <table class="table table-zebra w-full">
+        <thead class="sticky top-0 bg-base-100 shadow-sm z-10">
+          <tr>
+            <th>Medicamento</th>
+            <th>Dosagem / Freq.</th>
+            <th>Período</th>
+            <th class="text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of medications(); track m.id) {
+            <tr class="hover" [class.opacity-50]="!m.active">
+              <td>
+                <div class="font-bold flex items-center gap-2">
+                  {{ m.name }}
+                  @if (!m.active) {
+                    <span class="badge badge-ghost badge-xs">Finalizado</span>
+                  }
+                </div>
+              </td>
+              <td>{{ m.dosage }} • {{ m.frequency }}</td>
+              <td class="text-xs">
+                <div>Ini: {{ m.startDate | date:'dd/MM/yyyy' }}</div>
+                @if (m.endDate) {
+                  <div>Fim: {{ m.endDate | date:'dd/MM/yyyy' }}</div>
+                }
+              </td>
+              <td class="flex justify-end gap-2">
+                <button (click)="onEdit(m)" class="btn btn-ghost btn-xs text-info" title="Editar">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                </button>
+                <button (click)="onDelete(m.id)" class="btn btn-ghost btn-xs text-error" title="Excluir">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="text-center py-8 text-base-content/40 italic">Nenhum medicamento registrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-action">
+      <button class="btn btn-warning btn-outline btn-block" (click)="closeModal()">Fechar</button>
+    </div>
+  </div>
+</dialog>

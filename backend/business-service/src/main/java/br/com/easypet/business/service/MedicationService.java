@@ -46,7 +46,6 @@ public class MedicationService {
         return medicationMapper.toResponse(medicationRepository.save(medication));
     }
     @Transactional(readOnly = true)
-    @Cacheable(value = "medications", key = "#petId")
     public List<MedicationResponse> findAllByPet(UUID petId) {
         findPetIfOwner(petId);
         return medicationRepository.findAllByPetIdOrderByStartDateDesc(petId)

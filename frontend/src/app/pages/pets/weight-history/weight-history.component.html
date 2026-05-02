@@ -1,0 +1,43 @@
+<dialog id="weight_history_modal" class="modal">
+  <div class="modal-box max-w-2xl">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="font-black text-2xl text-primary">⚖️ Histórico de Pesagens</h3>
+      <button class="btn btn-sm btn-circle btn-ghost" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="overflow-x-auto max-h-[60vh]">
+      <table class="table table-zebra w-full">
+        <thead class="sticky top-0 bg-base-100 shadow-sm z-10">
+          <tr>
+            <th>Data</th>
+            <th>Peso</th>
+            <th class="text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of weights(); track item.id) {
+            <tr class="hover">
+              <td class="font-medium">{{ item.date | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <span class="font-black text-primary">{{ item.weight | number:'1.1-2' }} kg</span>
+              </td>
+              <td class="flex justify-end">
+                <button (click)="onDelete(item.id)" class="btn btn-ghost btn-xs text-error hover:bg-error/10" title="Excluir">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="3" class="text-center py-8 text-base-content/40 italic">Nenhum registro de peso encontrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-action">
+      <button class="btn btn-primary btn-outline btn-block" (click)="closeModal()">Fechar</button>
+    </div>
+  </div>
+</dialog>

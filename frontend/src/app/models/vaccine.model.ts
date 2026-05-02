@@ -6,14 +6,23 @@ export enum VaccineStatus {
 
 export interface VaccineRequest {
   name: string;
-  applicationDate?: string;
-  nextDoseDate?: string;
+  applicationDate: string;
+  nextDoseDate: string;
   status: VaccineStatus;
+  vetName?: string;
+  manufacturer?: string;
+  lot?: string;
+  observations?: string;
 }
+
 export interface VaccineResponse {
   id: string;
   name: string;
   applicationDate: string;
   nextDoseDate: string;
   status: VaccineStatus;
+  vetName?: string;
+  manufacturer?: string;
+  lot?: string;
+  observations?: string;
 }

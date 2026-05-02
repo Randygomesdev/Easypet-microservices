@@ -47,7 +47,7 @@
 
         <div class="form-control w-full">
           <label class="label"><span class="label-text font-semibold">Peso (kg)*</span></label>
-          <input type="number" step="0.1" formControlName="weight" placeholder="Ex: 30.5" class="input input-bordered w-full" 
+          <input type="number" step="0.1" formControlName="weight" placeholder="Ex: 30,5" class="input input-bordered w-full" 
                  [class.input-error]="petForm.get('weight')?.invalid && petForm.get('weight')?.touched" />
         </div>
       </div>
@@ -69,7 +69,7 @@
       <div class="modal-action mt-8">
         <button type="button" class="btn" (click)="closeModal()">Cancelar</button>
         
-        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+        <button type="submit" class="btn btn-primary px-8 text-white" [disabled]="petForm.invalid || loading()">
           @if (loading()) {
             <span class="loading loading-spinner"></span> Salvando...
           } @else {

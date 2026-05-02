@@ -43,7 +43,7 @@ public class WeightController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir registro de peso dos pets")
-    public ResponseEntity<Void> delete(@PathVariable UUID petId, @RequestParam UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID petId, @PathVariable UUID id) {
         weightRecordService.delete(petId, id);
         return ResponseEntity.noContent().build();
     }

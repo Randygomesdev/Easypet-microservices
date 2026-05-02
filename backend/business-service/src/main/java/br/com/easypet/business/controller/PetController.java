@@ -45,6 +45,13 @@ public class PetController {
         return ResponseEntity.ok(petService.findAllByOwner(userId, pageable));
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Buscar detalhes de um pet pelo ID")
+    public ResponseEntity<PetResponse> findById(@PathVariable UUID id) {
+        UUID userId = getCurrentUserId();
+        return ResponseEntity.ok(petService.findById(userId, id));
+    }
+
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza as informações do Pet selecionado")
     public ResponseEntity<PetResponse> update(@PathVariable UUID id, @Valid @RequestBody PetRequest request) {

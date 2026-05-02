@@ -15,22 +15,23 @@ Esse projeto serve como um MVP (Minimum Viable Product) funcional, incluindo aut
 ## 🚀 Tecnologias Utilizadas
 
 ### 🎨 Frontend
-- **Angular 21** (Arquitetura Standalone & Signals)
+- **Angular 19** (Arquitetura Standalone, Signals & Control Flow)
 - **Tailwind CSS 3** (Estilização utilitária)
 - **DaisyUI 4.x** (Biblioteca de componentes visuais UI)
+- **ApexCharts** (Visualização de dados e gráficos evolutivos)
 - Integração com **Google OAuth2** (Login Social)
 
 ### ⚙️ Backend (Microserviços)
 - **Java 21+ & Spring Boot 3** (Framework Base)
 - **Spring Cloud Gateway** (`easypet-gateway`)
 - **Spring Security & JWT** (`auth-service`)
-- **Spring Data JPA** (`business-service` e catálogos)
+- **Spring Data JPA** (`business-service`)
 - Arquitetura baseada em **Record Types** e **DTOs**
 
 ### 🗄️ Infraestrutura & Bancos de Dados
 - **PostgreSQL** (Bancos isolados por domínio: `auth_db` e `business_db`)
 - **Docker & Docker Compose** (Orquestração de containers)
-- **pgAdmin** (Gerenciamento visual do banco de dados)
+- **Redis** (Opcional para cache de sessões/consultas)
 
 ---
 
@@ -40,7 +41,7 @@ O backend foi dividido para garantir que cada domínio seja escalável de forma 
 
 1. **API Gateway (`easypet-gateway`)**: Ponto de entrada único da aplicação. Roteia as requisições para os serviços correspondentes.
 2. **Auth Service (`auth-service`)**: Responsável por todo o fluxo de autenticação, registro, esqueci minha senha, emissão e validação de tokens JWT, além do Login Social via Google.
-3. **Business Service (`business-service`)**: Lida com a lógica de negócio principal. Atualmente gerencia toda a entidade de **Pets** (Cadastro, Edição, Deleção e Listagem paginada).
+3. **Business Service (`business-service`)**: Lida com a lógica de negócio principal. Gerencia Pets e todo o ecossistema de **Saúde Animal**.
 
 ---
 
@@ -48,12 +49,14 @@ O backend foi dividido para garantir que cada domínio seja escalável de forma 
 
 - [x] **Autenticação Completa:** Login, Registro e Redefinição de Senha.
 - [x] **Login Social:** Integração nativa e transparente com Google Auth.
-- [x] **Proteção de Rotas:** Frontend protegido via Guards funcionais (Angular) e interceptors de Token JWT.
-- [x] **Pet Management (CRUD):** 
-  - Listagem em grid com paginação.
-  - Adição e Edição via Modais reativos e responsivos.
-  - Deleção com estratégia de exclusão segura.
-- [x] **Interface Premium:** Design elegante utilizando padrões modernos (sombras sutis, bordas arredondadas e interações responsivas).
+- [x] **Pet Management (CRUD):** Listagem, Adição, Edição e Exclusão Segura.
+- [x] **Gestão de Saúde Animal (Pet Health):**
+  - **Histórico de Peso:** Acompanhamento com gráfico evolutivo interativo.
+  - **Cartão de Vacinas:** Controle de doses aplicadas e alertas para reforços.
+  - **Medicamentos:** Gestão de tratamentos ativos e histórico de prescrições.
+  - **Prontuário de Consultas:** Registro completo de visitas ao veterinário, motivos e observações clínicas.
+- [x] **Interface Premium:** Design elegante utilizando padrões modernos (sombras sutis, animações de fade-in e interações responsivas).
+- [x] **Angular Moderno:** Implementação 100% baseada em Signals e no novo Control Flow (`@if`, `@for`).
 
 ---
 
