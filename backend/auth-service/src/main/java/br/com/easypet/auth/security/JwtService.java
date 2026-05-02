@@ -34,7 +34,10 @@ public class JwtService {
         extraClaims.put("role", user.getRole().name());
         extraClaims.put("userId", user.getId().toString());
         extraClaims.put("name", user.getName());
-        extraClaims.put("pictureUrl", user.getPictureUrl());
+      
+        if (user.getPictureUrl() != null) {
+            extraClaims.put("pictureUrl", user.getPictureUrl());
+        }
 
         return buildToken(extraClaims, user.getUsername(), jwtExpiration);
     }
